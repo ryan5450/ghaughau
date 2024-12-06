@@ -11,7 +11,7 @@ import {
 
 const Navbar = () => {
   return (
-    <nav className='fixed w-full h-36 shadow-xl bg-nav_color'>
+    <nav className='fixed sticky w-full h-36 shadow-none bg-nav_color'>
         
         <div className='flex justify-between items-center h-full w-full px-4 2xl:px-16'>
         <Link href='/'>
