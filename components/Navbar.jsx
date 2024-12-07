@@ -25,9 +25,12 @@ const Navbar = () => {
         />
         </Link>
         <SignedOut>
-            <SignInButton>
+
+        <SignInButton>
                 <button className="px-6 py-2 bg-orange-300 text-white font-medium rounded-full shadow-md hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"> Sign in</button>
-            </SignInButton>
+        </SignInButton>
+
+            
         </SignedOut>
         <SignedIn>
             <UserButton>

@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/sign-in/[[...sign-in]]/page.jsx", "src/middleware.js"  ],
   "exclude": [
     "node_modules"
   ]
