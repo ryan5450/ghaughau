@@ -1,28 +1,28 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Navbar2 = () => {
+const Footer = () => {
   return (
-    <nav className="bg-[#8174A0] fixed sticky w-full p-4 shadow-none" style={{ fontFamily: 'Acme, sans-serif' }}>
-      <div className="flex items-center justify-start space-x-8 ml-8">
-        <Link href="/adopt">
+    <footer className="bg-[#8174A0] fixed sticky w-full p-10 shadow-md" style={{ fontFamily: 'Acme, sans-serif' }}>
+      <div className="flex items-center justify-center space-x-14">
+        <Link href="/feedback">
           <button className="text-white text-lg font-light hover:bg-purple-600 py-2 px-4 rounded-md transition duration-300">
-            Adopt
+            Feedback
           </button>
         </Link>
-        <Link href="/about">
+        <Link href="/policy">
           <button className="text-white text-lg font-light hover:bg-purple-600 py-2 px-4 rounded-md transition duration-300">
-            About Us
+            Policy
           </button>
         </Link>
-        <Link href="/contact">
+        <Link href="/faqs">
           <button className="text-white text-lg font-light hover:bg-purple-600 py-2 px-4 rounded-md transition duration-300">
-            Contact
+            FAQs
           </button>
         </Link>
       </div>
-    </nav>
+    </footer>
   );
 };
 
-export default Navbar2;
+export default Footer;
