@@ -9,7 +9,7 @@ const page = () => {
         <Navbar/>
         <div className='flex justify-center p-11'>
 
-        <SignUp/>
+        <SignUp  />
         </div>
     </div>
   )
