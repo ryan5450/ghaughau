@@ -7,8 +7,8 @@ async function fetchPetDetails(id) {
 
     // Construct the base URL dynamically
     const baseUrl = isServer
-      ?  "http://localhost:3000" || process.env.NEXT_PUBLIC_BASE_URL // Use environment variable or default to localhost
-      : ""; // Empty string for relative paths in the browser
+      ?  "http://localhost:3000" || process.env.NEXT_PUBLIC_BASE_URL 
+      : ""; 
 
     const res = await fetch(`${baseUrl}/api/pets?id=${id}`);
     if (!res.ok) throw new Error("Failed to fetch pet details");

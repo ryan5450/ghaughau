@@ -6,12 +6,11 @@ export async function GET(req) {
   try {
     await connectToDatabase();
 
-    // Use the URLSearchParams API for parsing search parameters
-    const { searchParams } = new URL(req.url, "http://http://localhost:3000/"); // Add a base URL here
+   
+    const { searchParams } = new URL(req.url, "http://http://localhost:3000/"); 
     const id = searchParams.get("id");
 
     if (id) {
-      // Fetch a single pet by ID
       const pet = await Pet.findById(id);
 
       if (!pet) {
@@ -24,7 +23,6 @@ export async function GET(req) {
       return NextResponse.json(pet);
     }
 
-    // Fetch all pets
     const pets = await Pet.find();
     return NextResponse.json(pets);
   } catch (error) {
