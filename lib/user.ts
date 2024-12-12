@@ -41,4 +41,19 @@ export async function UpdateUser(id: string, data: Partial<User>) {
   } catch (error) {
     return { error }
   }
+
+
 }
+export async function DeleteUser(id: string, data: Partial<User>) {
+    try {
+      const user = await prisma.user.delete({
+        where: { id }
+        
+      })
+      return { user }
+    } catch (error) {
+      return { error }
+    }
+  
+  
+  }

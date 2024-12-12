@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 
 import Link from 'next/link'
-import { SignIn, SignInButton } from '@clerk/nextjs';
+import { SignIn } from '@clerk/nextjs';
 import logo from '../../../../public/logo.png'
 const page = () => {
   return (
@@ -30,7 +30,7 @@ const page = () => {
 
         <div className='flex justify-center p-11'>
 
-        <SignIn forceRedirectUrl="/" />
+        <SignIn   />
         </div>
     </div>
   )

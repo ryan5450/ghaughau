@@ -16,7 +16,7 @@ const Hero = () => {
       </h2>
       <div className="w-full">
         <img
-          src="/heroimage.png"
+          src="/heroimage.svg"
           className="w-full object-cover mt-8"
         />
       </div>
