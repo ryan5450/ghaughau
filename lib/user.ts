@@ -57,3 +57,5 @@ export async function DeleteUser(id: string, data: Partial<User>) {
   
   
   }
+
+  export default prisma.user
