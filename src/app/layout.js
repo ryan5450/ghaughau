@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import TawkToWidget from "../../components/TawkToWidget"
 
 import {
   ClerkProvider
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         <body  className="font-acme">
  
           {children}
+          <TawkToWidget />
         </body>
       </html>
       

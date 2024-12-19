@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import Navbar from '../../../components/Navbar';
@@ -9,19 +9,57 @@ const Contact = () => {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userMessage, setUserMessage] = useState('');
-  const [submittedContactInfo, setSubmittedContactInfo] = useState([]);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNameChange = (e) => setUserName(e.target.value);
   const handleEmailChange = (e) => setUserEmail(e.target.value);
   const handleMessageChange = (e) => setUserMessage(e.target.value);
 
-  const handleSubmitContact = (e) => {
+  const handleSubmitContact = async (e) => {
     e.preventDefault();
+    setSuccessMessage('');
+    setErrorMessage('');
+    setIsLoading(true);
+
     if (userName.trim() && userEmail.trim() && userMessage.trim()) {
-      setSubmittedContactInfo([...submittedContactInfo, { userName, userEmail, userMessage }]);
-      setUserName('');
-      setUserEmail('');
-      setUserMessage('');
+      const newContact = { userName, userEmail, userMessage };
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newContact),
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await response.json();
+          if (response.ok) {
+            setSuccessMessage('Message sent successfully!');
+            setUserName('');
+            setUserEmail('');
+            setUserMessage('');
+          } else {
+            setErrorMessage(data.error || 'Failed to send your message. Please try again.');
+          }
+        } else {
+          const text = await response.text();
+          console.error('Received non-JSON response:', text);
+          setErrorMessage('Received an unexpected response from the server. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        setErrorMessage(`An error occurred: ${error.message}. Please try again.`);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setErrorMessage('All fields are required.');
+      setIsLoading(false);
     }
   };
 
@@ -92,25 +130,15 @@ const Contact = () => {
               <button
                 type="submit"
                 className="w-full bg-[#FFC585] text-white py-2 rounded-lg mt-4"
+                disabled={isLoading}
               >
-                Send Message
+                {isLoading ? 'Sending...' : 'Send Message'}
               </button>
+              {isLoading && <p className="mt-4 text-blue-600">Sending message...</p>}
+              {successMessage && <p className="mt-4 text-green-600">{successMessage}</p>}
+              {errorMessage && <p className="mt-4 text-red-600">{errorMessage}</p>}
             </form>
           </div>
-
-          {/* Render submitted contact info */}
-          {submittedContactInfo.length > 0 && (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-semibold text-[#4B3F72]">Messages Sent</h2>
-              {submittedContactInfo.map((info, index) => (
-                <div key={index} className="mt-4 border-t pt-4">
-                  <h3 className="font-semibold text-[#4B3F72]">{info.userName}</h3>
-                  <p className="text-[#6B5B8C]">{info.userEmail}</p>
-                  <p className="mt-2 text-[#6B5B8C]">{info.userMessage}</p>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 

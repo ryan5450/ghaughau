@@ -1,0 +1,7 @@
+POST http://localhost:3000/api/testroute
+Content-Type : application/json
+
+{
+    "hello":"world"
+}
+GET http://localhost:3000/api/testroute

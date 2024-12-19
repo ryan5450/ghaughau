@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../../components/Navbar';
 import Navbar2 from '../../../components/Navbar2';
 import Footer from '../../../components/Footer';
@@ -9,6 +9,8 @@ const Faqs = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [userQuestion, setUserQuestion] = useState('');
   const [submittedQuestions, setSubmittedQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   
   const toggleAnswer = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -18,22 +20,64 @@ const Faqs = () => {
     setUserQuestion(e.target.value);
   };
 
-  const handleSubmitQuestion = (e) => {
+  const handleSubmitQuestion = async (e) => {
     e.preventDefault();
     if (userQuestion.trim()) {
-      setSubmittedQuestions([...submittedQuestions, { question: userQuestion, answer: "Thanks for your question! We will get back to you soon." }]);
-      setUserQuestion(''); // Clear the input after submission
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/questions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: 'user123', // Replace with actual user ID when available
+            question: userQuestion,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit question');
+        }
+
+        const savedQuestion = await response.json();
+        setSubmittedQuestions([...submittedQuestions, savedQuestion]);
+        setUserQuestion('');
+      } catch (err) {
+        setError('Failed to submit question. Please try again.');
+        console.error('Error submitting question:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchAnsweredQuestions = async () => {
+      try {
+        const response = await fetch('/api/questions');
+        if (!response.ok) {
+          throw new Error('Failed to fetch answered questions');
+        }
+        const answeredQuestions = await response.json();
+        setSubmittedQuestions(answeredQuestions);
+      } catch (err) {
+        console.error('Error fetching answered questions:', err);
+      }
+    };
+
+    fetchAnsweredQuestions();
+  }, []);
 
   const faqs = [
     {
       question: "How can I adopt a pet?",
-      answer: "To adopt a pet, browse our available animals, select the one you’re interested in, and fill out an adoption application. Once approved, you'll be guided through the adoption process."
+      answer: "To adopt a pet, browse our available animals, select the one you're interested in, and fill out an adoption application. Once approved, you'll be guided through the adoption process."
     },
     {
       question: "What are the adoption fees?",
-      answer: "Adoption fees vary depending on the pet's age, size, and breed. Please check the pet’s details page for specific fee information."
+      answer: "Adoption fees vary depending on the pet's age, size, and breed. Please check the pet's details page for specific fee information."
     },
     {
       question: "Can I adopt a pet if I live in an apartment?",
@@ -51,7 +95,6 @@ const Faqs = () => {
       question: "Can I volunteer to help with pet adoption?",
       answer: "Yes, we welcome volunteers to help with various tasks like pet care, event coordination, and administrative support. Contact us to learn more about volunteer opportunities."
     },
-
   ];
 
   return (
@@ -79,7 +122,7 @@ const Faqs = () => {
           {/* Render submitted user questions */}
           {submittedQuestions.map((submitted, index) => (
             <div
-              key={index}
+              key={submitted._id || index}
               className="bg-white p-4 rounded-lg shadow-md mb-4 cursor-pointer"
             >
               <h2 className="text-lg font-semibold text-[#4B3F72]">{submitted.question}</h2>
@@ -101,9 +144,11 @@ const Faqs = () => {
               <button
                 type="submit"
                 className="mt-4 bg-[#FFC585] text-white px-6 py-2 rounded-lg"
+                disabled={isLoading}
               >
-                Submit Question
+                {isLoading ? 'Submitting...' : 'Submit Question'}
               </button>
+              {error && <p className="mt-2 text-red-500">{error}</p>}
             </form>
           </div>
         </div>
@@ -117,3 +162,4 @@ const Faqs = () => {
 };
 
 export default Faqs;
+
