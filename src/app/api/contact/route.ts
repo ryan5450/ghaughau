@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     await connectToDatabase();
     const body = await request.json();
-    const { userName, userEmail, userMessage } = body;
+    const { userName, userEmail, userMessage , createdAt , updatedAt } = body;
 
     if (!userName || !userEmail || !userMessage) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -31,6 +31,8 @@ export async function POST(request: Request) {
       userName,
       userEmail,
       userMessage,
+      createdAt,
+      updatedAt
     });
 
     const savedContact = await newContact.save();

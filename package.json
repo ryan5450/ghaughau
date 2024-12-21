@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/backend": "^1.21.4",
     "@clerk/clerk-react": "^5.18.1",
     "@clerk/nextjs": "^6.7.0",
     "@next/font": "^14.2.15",
@@ -17,8 +18,10 @@
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.0",
     "next": "15.0.3",
+    "nodemailer": "^6.9.16",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-icons": "^5.4.0",
     "svix": "^1.42.0"
   },
   "devDependencies": {

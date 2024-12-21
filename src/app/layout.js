@@ -1,4 +1,4 @@
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
 import TawkToWidget from "../../components/TawkToWidget"
 
@@ -24,8 +24,8 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body  className="font-acme">
  
-          {children}
           <TawkToWidget />
+          {children}
         </body>
       </html>
       
