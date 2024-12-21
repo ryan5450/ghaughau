@@ -18,5 +18,5 @@ model User {
   clerkUserId String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  favorites Favorite[]
+
 }
