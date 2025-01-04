@@ -1,6 +1,5 @@
 "use client";
 
-"use client";
 
 import React, { useState, useEffect } from "react";
 import { AiFillHeart } from "react-icons/ai";
@@ -11,7 +10,7 @@ import { notFound } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { use } from "react"; // New hook for handling async params
 import Link from "next/link";
-
+import LoadingSpinner from "../../../../components/LoadingSpinner";
 async function fetchPetDetails(id) {
   try {
     const res = await fetch(`/api/pets?id=${id}`);
@@ -138,7 +137,9 @@ export default function PetDetailsPage({ params }) {
     }
   };
 
-  if (!id || !pet) return <div>Loading...</div>;
+  if (!id || !pet)  {
+      return <LoadingSpinner />;
+    }
 
 
   return (
@@ -152,7 +153,7 @@ export default function PetDetailsPage({ params }) {
         <div className="md:w-1/2 md:pr-8">
           <h2 className="text-5xl font-acme text-[#8174A0]">{pet.name}</h2>
           <p className="text-orange-500 text-l font-acme">
-            {pet.adoptionStatus === "available" ? "Special home needed!" : "Adopted"}
+            {pet.adoptionStatus === "Available" ? "Special home needed!" : "Adopted"}
           </p>
           <section className="mt-4">
             <h3 className="text-5xl font-acme text-[#A888B5]">About {pet.name}:</h3>
@@ -169,10 +170,10 @@ export default function PetDetailsPage({ params }) {
             </div>
             <div className="border-l-2 border-[#A888B5] h-full"></div>
             <div className="col-span-5 text-left text-xl">
-              <p>
+              <p>  
                 <strong>Breed:</strong> {pet.breed}
-              </p>
-              <p>
+              </p> 
+              <p> 
                 <strong>Gender:</strong> {pet.gender}
               </p>
             </div>

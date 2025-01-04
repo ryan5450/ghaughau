@@ -7,7 +7,7 @@ import Navbar from "../../../../components/Navbar";
 import Navbar2 from "../../../../components/Navbar2";
 import Footer from "../../../../components/Footer";
 import Link from "next/link";
-
+import LoadingSpinner from "../../../../components/LoadingSpinner";
 export default function FavoritesPage() {
   const { id } = useParams(); // Get `userId` from the URL
   const { user } = useUser();
@@ -90,10 +90,8 @@ export default function FavoritesPage() {
           <Navbar />
           <Navbar2 />
         </header>
-        <main className="container mx-auto px-4 py-8 flex-grow">
-          <div className="text-center">
-            <p className="text-[#A888B5] text-xl font-acme">Loading your favorites...</p>
-          </div>
+        <main className="container mx-auto px-4 py-8 flex-grow flex items-center justify-center">
+          <LoadingSpinner />
         </main>
         <Footer />
       </div>

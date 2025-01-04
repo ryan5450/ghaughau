@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 export default function UserManagement() {
@@ -12,7 +14,7 @@ export default function UserManagement() {
         if (!response.ok) throw new Error("Failed to fetch users");
         const result = await response.json();
         if (Array.isArray(result.data)) {
-          setUsers(result.data); // Access the "data" key to get the array
+          setUsers(result.data);
         } else {
           console.error("Unexpected data format:", result);
         }
@@ -62,6 +64,30 @@ export default function UserManagement() {
     }
   };
 
+  // Handle toggling admin status
+  const handleToggleAdmin = async (id, currentAdminStatus) => {
+    try {
+      const response = await fetch("/api/users/toggle-admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, isAdmin: !currentAdminStatus }),
+      });
+      if (response.ok) {
+        setUsers((prev) =>
+          prev.map((user) =>
+            user.id === id
+              ? { ...user, publicMetadata: { ...user.publicMetadata, role: currentAdminStatus ? "user" : "admin" } }
+              : user
+          )
+        );
+      } else {
+        alert("Failed to update admin status");
+      }
+    } catch (error) {
+      console.error("Error updating admin status:", error);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">User Management</h1>
@@ -73,6 +99,7 @@ export default function UserManagement() {
             <th className="px-4 py-3">Name</th>
             <th className="px-4 py-3">Username</th>
             <th className="px-4 py-3">Email</th>
+            <th className="px-4 py-3">Admin</th>
             <th className="px-4 py-3">Actions</th>
           </tr>
         </thead>
@@ -87,6 +114,16 @@ export default function UserManagement() {
                 <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
                 <td className="px-4 py-2">{user.username}</td>
                 <td className="px-4 py-2">{user.emailAddresses[0]?.emailAddress}</td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => handleToggleAdmin(user.id, user.publicMetadata?.role === "admin")}
+                    className={`px-2 py-1 rounded ${
+                      user.publicMetadata?.role === "admin" ? "bg-green-500 text-white" : "bg-gray-300"
+                    }`}
+                  >
+                    {user.publicMetadata?.role === "admin" ? "Admin" : "User"}
+                  </button>
+                </td>
                 <td className="px-4 py-2">
                   <button
                     onClick={() => setEditingUser(user)}
@@ -105,7 +142,7 @@ export default function UserManagement() {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center py-4">
+              <td colSpan="7" className="text-center py-4">
                 No users found.
               </td>
             </tr>
@@ -208,3 +245,4 @@ export default function UserManagement() {
     </div>
   );
 }
+

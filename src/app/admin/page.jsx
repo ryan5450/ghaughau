@@ -3,29 +3,35 @@
 import { useState, useEffect } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import Sidebar from "../admin/components/Sidebar";
-import PetManagement from "../admin/components/PetManagement";
-import UserManagement from "../admin/components/UserManagement";
+import Sidebar from "./components/Sidebar";
+import PetManagement from "./components/PetManagement";
+import UserManagement from "./components/UserManagement";
 import QuestionManagement from "./components/QuestionManagement";
-import AdoptionApplications from "../admin/components/AdoptionApplications";
+import AdoptionApplications from "./components/AdoptionApplications";
+import LoadingSpinner from "../../../components/LoadingSpinner"; // Assume you have this component
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState("pets");
-  const { isSignedIn } = useAuth();
-  const { user } = useUser();
+  const { isLoaded, userId } = useAuth();
+  const { user, isLoaded: isUserLoaded } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-
-
-    if (user && user.publicMetadata.role !== "admin") {
+    if (isLoaded && !userId) {
+      router.push("/sign-in"); // Redirect to sign-in page if not authenticated
+    } else if (isUserLoaded && user && user.publicMetadata.role !== "admin") {
       router.push("/forbidden");
     }
-  }, [isSignedIn, user, router]);
+  }, [isLoaded, userId, isUserLoaded, user, router]);
 
-  // Loading state while user data is fetched
-  if (!user) {
-    return <p>Loading...</p>;
+  // Show loading state while authentication or user data is being fetched
+  if (!isLoaded || !isUserLoaded) {
+    return <LoadingSpinner />;
+  }
+
+  // If there's no user or the user is not an admin, don't render the dashboard
+  if (!user || user.publicMetadata.role !== "admin") {
+    return null; // This will prevent the dashboard from flashing before redirect
   }
 
   const renderContent = () => {
@@ -52,3 +58,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
